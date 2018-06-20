@@ -2,3 +2,5 @@
 import { config } from '../../config-sample'; // TODO: '../../config'
 
 import './FizzBuzz/fizzbuzz';
+
+import './ToDoList/todolistapp';
