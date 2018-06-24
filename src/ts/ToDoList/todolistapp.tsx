@@ -10,6 +10,7 @@ import { runAllTests } from './tests';
 import { TodoList } from './components/TodoList';
 import { AddTodo } from './components/AddTodo';
 import { Footer } from './components/Footer';
+import { Link } from './components/FilterLink';
 
 // todo: move to test script command
 runAllTests();
@@ -34,44 +35,55 @@ const getVisibleTodos = (todos: ITodo[], filter: TodoFilter) => {
 }
 
 let nextTodoId = 0;
-class TodoApp extends React.Component<IAppState> {
-    private input?: HTMLInputElement;
-    filter(filter: TodoFilter) {
-        {
-            store.dispatch({
-                type: 'SET_VISIBILITY_FILTER',
-                filter
-            });
-        }
-    }
-    render() {
-        const {
-            todos,
-            visibilityFilter
-        } = this.props;
-
-        const visibleTodos = getVisibleTodos(todos, visibilityFilter);
-        return (
-            <div>
-                <AddTodo onAddClick={todo =>
-                    store.dispatch({
-                        type: 'ADD_TODO',
-                        text: todo,
-                        id: nextTodoId++
-                    })} />
-                <TodoList todos={visibleTodos} onTodoClick={id =>
-                    store.dispatch({
-                        type: 'TOGGLE_TODO', id
-                    })
-                } />
-                <Footer visibilityFilter={visibilityFilter} onFilterClick={filter =>
-                    this.filter(filter
-                    )} />
-            </div>
-        )
-    }
+// container component
+const TodoApp = ({ todos, visibilityFilter }: IAppState) => {
+    return (
+        <div>
+            <AddTodo onAddClick={todo =>
+                store.dispatch({
+                    type: 'ADD_TODO',
+                    text: todo,
+                    id: nextTodoId++
+                })} />
+            <TodoList todos={getVisibleTodos(todos, visibilityFilter)} onTodoClick={id =>
+                store.dispatch({
+                    type: 'TOGGLE_TODO', id
+                })
+            } />
+            <Footer />
+        </div>
+    )
 }
 
+type FilterLinkProps = {
+    filter: TodoFilter;
+
+}
+
+export class FilterLink extends React.Component<FilterLinkProps, {}> {
+    private unsubscribe?: () => void;
+    componentDidMount() {
+        this.unsubscribe = store.subscribe(() => this.forceUpdate());
+    }
+
+    componentWillUnmout() {
+        if(this.unsubscribe)
+            this.unsubscribe();
+    }
+
+    render() {
+        const props = this.props;
+        const state = store.getState();
+
+        return <Link active={props.filter === state.visibilityFilter}
+            onClick={(e) => {
+                store.dispatch({
+                    type: 'SET_VISIBILITY_FILTER',
+                    filter: props.filter
+                });
+            }} >{props.children}</Link>
+    }
+}
 const render = () => {
     ReactDom.render(
         <TodoApp {...store.getState() } />,
