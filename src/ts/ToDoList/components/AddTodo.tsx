@@ -1,9 +1,11 @@
 import * as React from 'react';
 
-type AddTodoProps = {
-    onAddClick: (todo:string) => void;
-}
-export const AddTodo = ({onAddClick}: AddTodoProps) => {
+// todo: get rid of the store dependency
+import {Store} from 'redux';
+declare const store: Store;
+
+let nextTodoId = 0;
+export const AddTodo = () => {
     let input: HTMLInputElement | undefined;
     return (
         <div>
@@ -11,7 +13,11 @@ export const AddTodo = ({onAddClick}: AddTodoProps) => {
                 input = node ? node : undefined;
             }} />
             <button onClick={() => {
-                onAddClick(input ? input.value : '');
+                store.dispatch({
+                        type: 'ADD_TODO',
+                        text: input ? input.value : '',
+                        id: nextTodoId++
+                    });
                 if (input)
                     input.value = '';
             }}>

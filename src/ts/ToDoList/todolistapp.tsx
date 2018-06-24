@@ -11,6 +11,7 @@ import { TodoList } from './components/TodoList';
 import { AddTodo } from './components/AddTodo';
 import { Footer } from './components/Footer';
 import { Link } from './components/FilterLink';
+import { VisibleTodoList } from './components/VisibleTodoList';
 
 // todo: move to test script command
 runAllTests();
@@ -23,73 +24,14 @@ const todoApp = combineReducers<IAppState>({
 
 const store = createStore(todoApp);
 
-const getVisibleTodos = (todos: ITodo[], filter: TodoFilter) => {
-    switch (filter) {
-        case 'SHOW_ALL':
-            return todos;
-        case 'SHOW_ACTIVE':
-            return todos.filter(t => !t.completed);
-        case 'SHOW_COMPLETED':
-            return todos.filter(t => t.completed);
-    }
-}
+const TodoApp = () =>
+    <div>
+        <AddTodo />
+        <VisibleTodoList />
+        <Footer />
+    </div>
 
-let nextTodoId = 0;
-// container component
-const TodoApp = ({ todos, visibilityFilter }: IAppState) => {
-    return (
-        <div>
-            <AddTodo onAddClick={todo =>
-                store.dispatch({
-                    type: 'ADD_TODO',
-                    text: todo,
-                    id: nextTodoId++
-                })} />
-            <TodoList todos={getVisibleTodos(todos, visibilityFilter)} onTodoClick={id =>
-                store.dispatch({
-                    type: 'TOGGLE_TODO', id
-                })
-            } />
-            <Footer />
-        </div>
-    )
-}
-
-type FilterLinkProps = {
-    filter: TodoFilter;
-
-}
-
-export class FilterLink extends React.Component<FilterLinkProps, {}> {
-    private unsubscribe?: () => void;
-    componentDidMount() {
-        this.unsubscribe = store.subscribe(() => this.forceUpdate());
-    }
-
-    componentWillUnmout() {
-        if(this.unsubscribe)
-            this.unsubscribe();
-    }
-
-    render() {
-        const props = this.props;
-        const state = store.getState();
-
-        return <Link active={props.filter === state.visibilityFilter}
-            onClick={(e) => {
-                store.dispatch({
-                    type: 'SET_VISIBILITY_FILTER',
-                    filter: props.filter
-                });
-            }} >{props.children}</Link>
-    }
-}
-const render = () => {
-    ReactDom.render(
-        <TodoApp {...store.getState() } />,
-        document.getElementById("app2")
-    );
-}
-
-store.subscribe(render);
-render();
+ReactDom.render(
+    <TodoApp />,
+    document.getElementById("app2")
+);
