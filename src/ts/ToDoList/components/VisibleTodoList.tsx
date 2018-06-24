@@ -1,13 +1,17 @@
 import * as React from "react";
-import { Store } from "redux";
-import { ITodo, TodoFilter } from "../interfaces";
+import * as PropTypes from "prop-types";
+import { ITodo, TodoFilter, IAppState } from "../interfaces";
 import { TodoList } from "./TodoList";
-
-declare const store: Store;
 
 export class VisibleTodoList extends React.Component {
     private unsubscribe?: () => void;
+
+    static contextTypes = {
+        store: PropTypes.object
+    }
+
     componentDidMount() {
+        const {store} = this.context;
         this.unsubscribe = store.subscribe(() => this.forceUpdate());
     }
 
@@ -29,6 +33,7 @@ export class VisibleTodoList extends React.Component {
 
     render() {
         const props = this.props;
+        const {store} = this.context;
         const state = store.getState();
 
         return <TodoList todos={this.getVisibleTodos(state.todos, state.visibilityFilter)} onTodoClick={id =>
@@ -37,4 +42,8 @@ export class VisibleTodoList extends React.Component {
             })}
         />
     }
+}
+
+VisibleTodoList.contextTypes = {
+    store: PropTypes.object
 }

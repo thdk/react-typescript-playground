@@ -1,27 +1,44 @@
-import * as React from 'react';
-import * as RectDom from 'react-dom'
-import { TodoFilter } from '../interfaces';
+import { TodoFilter } from "../interfaces";
+import * as React from "react";
+import * as PropTypes from "prop-types";
+import { Link } from "./Link";
 
-type LinkProps = {
-    active: boolean;
-    children?: any;
-    onClick: (e: any) => void;
+type FilterLinkProps = {
+    filter: TodoFilter;
 }
 
-export const Link = ({ active, children, onClick }: LinkProps) => {
-    if (active) {
-        return <span>{children}</span>;
+export class FilterLink extends React.Component<FilterLinkProps, {}> {
+    private unsubscribe?: () => void;
+
+    static contextTypes = {
+        store: PropTypes.object
     }
 
-    return (
-        <a href='#'
-            onClick={e => {
-                e.preventDefault();
-                onClick(e)
-            }
-            }
-        >
-            {children}
-        </a>
-    );
+    componentDidMount() {
+        const {store} = this.context;
+        this.unsubscribe = store.subscribe(() => this.forceUpdate());
+    }
+
+    componentWillUnmout() {
+        if (this.unsubscribe)
+            this.unsubscribe();
+    }
+
+    render() {
+        const props = this.props;
+        const {store} = this.context;
+        const state = store.getState();
+
+        return <Link active={props.filter === state.visibilityFilter}
+            onClick={(e) => {
+                store.dispatch({
+                    type: 'SET_VISIBILITY_FILTER',
+                    filter: props.filter
+                });
+            }} >{props.children}</Link>
+    }
+}
+
+FilterLink.contextTypes = {
+    store: PropTypes.object
 }

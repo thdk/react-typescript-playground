@@ -1,11 +1,10 @@
 import * as React from 'react';
-
-// todo: get rid of the store dependency
-import {Store} from 'redux';
-declare const store: Store;
+import * as PropTypes from 'prop-types';
+import { IAppState } from '../interfaces';
+import { Store } from 'redux';
 
 let nextTodoId = 0;
-export const AddTodo = () => {
+export const AddTodo: React.SFC = ({ }, { store }: { store: Store }) => {
     let input: HTMLInputElement | undefined;
     return (
         <div>
@@ -14,10 +13,10 @@ export const AddTodo = () => {
             }} />
             <button onClick={() => {
                 store.dispatch({
-                        type: 'ADD_TODO',
-                        text: input ? input.value : '',
-                        id: nextTodoId++
-                    });
+                    type: 'ADD_TODO',
+                    text: input ? input.value : '',
+                    id: nextTodoId++
+                });
                 if (input)
                     input.value = '';
             }}>
@@ -26,4 +25,6 @@ export const AddTodo = () => {
         </div>
     );
 }
-
+AddTodo.contextTypes = {
+    store: PropTypes.object
+}

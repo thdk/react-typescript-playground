@@ -1,20 +1,15 @@
 import 'redux';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-
 import { createStore, combineReducers } from "redux";
+import { Provider } from 'react-redux'; 
 
 import { ITodo, IAppState, TodoFilter } from './interfaces'
 import { todos, visibilityFilter } from './reducers';
 import { runAllTests } from './tests';
-import { TodoList } from './components/TodoList';
 import { AddTodo } from './components/AddTodo';
 import { Footer } from './components/Footer';
-import { Link } from './components/FilterLink';
 import { VisibleTodoList } from './components/VisibleTodoList';
-
-// todo: move to test script command
-runAllTests();
 
 // always name the reducers after the state key they manage
 const todoApp = combineReducers<IAppState>({
@@ -22,7 +17,8 @@ const todoApp = combineReducers<IAppState>({
     visibilityFilter
 });
 
-const store = createStore(todoApp);
+// todo: move to test script command
+runAllTests();
 
 const TodoApp = () =>
     <div>
@@ -32,6 +28,8 @@ const TodoApp = () =>
     </div>
 
 ReactDom.render(
-    <TodoApp />,
+    <Provider store={createStore(todoApp)}>
+    <TodoApp />
+    </Provider>,
     document.getElementById("app2")
 );
