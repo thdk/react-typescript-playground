@@ -1,44 +1,28 @@
-import { TodoFilter } from "../interfaces";
+import { TodoFilter, IAppState } from "../interfaces";
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { Link } from "../components/Link";
+import { Dispatch, connect } from "react-redux";
 
 type FilterLinkProps = {
     filter: TodoFilter;
 }
 
-export class FilterLink extends React.Component<FilterLinkProps, {}> {
-    private unsubscribe?: () => void;
+const mapStateToProps = (state: IAppState, ownProps: FilterLinkProps) => {
+    return {
+        active: ownProps.filter === state.visibilityFilter
+    };
+}
 
-    static contextTypes = {
-        store: PropTypes.object
-    }
-
-    componentDidMount() {
-        const {store} = this.context;
-        this.unsubscribe = store.subscribe(() => this.forceUpdate());
-    }
-
-    componentWillUnmout() {
-        if (this.unsubscribe)
-            this.unsubscribe();
-    }
-
-    render() {
-        const props = this.props;
-        const {store} = this.context;
-        const state = store.getState();
-
-        return <Link active={props.filter === state.visibilityFilter}
-            onClick={() => {
-                store.dispatch({
-                    type: 'SET_VISIBILITY_FILTER',
-                    filter: props.filter
-                });
-            }} >{props.children}</Link>
+const mapDispatchToProps = (dispatch: Dispatch, ownProps: FilterLinkProps) => {
+    return {
+        onClick: () => {
+            dispatch({
+                type: 'SET_VISIBILITY_FILTER',
+                filter: ownProps.filter
+            });
+        }
     }
 }
 
-FilterLink.contextTypes = {
-    store: PropTypes.object
-}
+export const FilterLink = connect<{ active: boolean }, { onClick: () => void }, FilterLinkProps, IAppState>(mapStateToProps, mapDispatchToProps)(Link);

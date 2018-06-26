@@ -25,8 +25,8 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        onTodoClick: (id:string) => dispatch({type: "TOGGLE_TODO", id})
+        onTodoClick: (id: number) => dispatch({ type: "TOGGLE_TODO", id })
     }
 }
 
-export const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList);
+export const VisibleTodoList = connect<{ todos: ITodo[] }, { onTodoClick: (id: number) => { type: string, id: number } }, {}, IAppState>(mapStateToProps, mapDispatchToProps)(TodoList);

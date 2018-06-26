@@ -3,8 +3,8 @@ import { ITodo } from '../interfaces';
 import { Todo } from '../components/Todo';
 
 export type TodoListProps = {
-    todos?: ITodo[] | undefined;
-    onTodoClick?: (id: number) => void
+    todos: ITodo[];
+    onTodoClick?: (id: number) => void;
 }
 
 export const TodoList = ({ todos, onTodoClick }: TodoListProps) => {
