@@ -1,7 +1,7 @@
 import { TodoFilter } from "../interfaces";
 import * as React from "react";
 import * as PropTypes from "prop-types";
-import { Link } from "./Link";
+import { Link } from "../components/Link";
 
 type FilterLinkProps = {
     filter: TodoFilter;
@@ -30,7 +30,7 @@ export class FilterLink extends React.Component<FilterLinkProps, {}> {
         const state = store.getState();
 
         return <Link active={props.filter === state.visibilityFilter}
-            onClick={(e) => {
+            onClick={() => {
                 store.dispatch({
                     type: 'SET_VISIBILITY_FILTER',
                     filter: props.filter

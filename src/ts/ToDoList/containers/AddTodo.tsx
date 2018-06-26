@@ -1,10 +1,14 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
+import { connect, Dispatch } from 'react-redux';
 import { IAppState } from '../interfaces';
 import { Store } from 'redux';
 
+export interface TodoProps {
+    dispatch: Dispatch
+}
+
 let nextTodoId = 0;
-export const AddTodo: React.SFC = ({ }, { store }: { store: Store }) => {
+const _AddTodo: React.SFC<TodoProps> = ({ dispatch }) => {
     let input: HTMLInputElement | undefined;
     return (
         <div>
@@ -12,7 +16,7 @@ export const AddTodo: React.SFC = ({ }, { store }: { store: Store }) => {
                 input = node ? node : undefined;
             }} />
             <button onClick={() => {
-                store.dispatch({
+                dispatch({
                     type: 'ADD_TODO',
                     text: input ? input.value : '',
                     id: nextTodoId++
@@ -21,10 +25,9 @@ export const AddTodo: React.SFC = ({ }, { store }: { store: Store }) => {
                     input.value = '';
             }}>
                 Add todo
-                </button>
+            </button>
         </div>
     );
-}
-AddTodo.contextTypes = {
-    store: PropTypes.object
-}
+};
+
+export const AddTodo = connect()(_AddTodo);

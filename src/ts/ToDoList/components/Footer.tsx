@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TodoFilter } from "../interfaces";
-import { FilterLink } from './FilterLink';
+import { FilterLink } from '../containers/FilterLink';
 
 type FooterProps = {
     visibilityFilter: TodoFilter;

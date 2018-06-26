@@ -35,7 +35,6 @@ export const todos = (state: ITodo[] = [], action: any): ITodo[] => {
     console.log(action);
     switch (action.type) {
         case 'ADD_TODO':
-            state.concat()
             return [
                 ...state,
                 todo(undefined, action)
