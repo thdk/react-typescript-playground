@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as RectDom from 'react-dom'
 import { TodoFilter } from '../interfaces';
 
-type LinkProps = {
+export type LinkProps = {
     active: boolean;
     children?: any;
     onClick: (e: any) => void;

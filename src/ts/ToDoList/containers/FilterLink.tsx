@@ -1,28 +1,27 @@
 import { TodoFilter, IAppState } from "../interfaces";
 import * as React from "react";
-import * as PropTypes from "prop-types";
-import { Link } from "../components/Link";
+import { Link, LinkProps } from "../components/Link";
 import { Dispatch, connect } from "react-redux";
+import { setVisibilityfilter } from "../actions/visibilityfilter";
 
 type FilterLinkProps = {
     filter: TodoFilter;
 }
 
-const mapStateToProps = (state: IAppState, ownProps: FilterLinkProps) => {
+type StateToPropstype = Pick<LinkProps, "active">;
+const mapStateToProps = (state: IAppState, ownProps: FilterLinkProps): StateToPropstype => {
     return {
         active: ownProps.filter === state.visibilityFilter
     };
 }
 
-const mapDispatchToProps = (dispatch: Dispatch, ownProps: FilterLinkProps) => {
+type DispatchToPropsType = Pick<LinkProps, "onClick">;
+const mapDispatchToProps = (dispatch: Dispatch, ownProps: FilterLinkProps):  DispatchToPropsType=> {
     return {
         onClick: () => {
-            dispatch({
-                type: 'SET_VISIBILITY_FILTER',
-                filter: ownProps.filter
-            });
+            dispatch(setVisibilityfilter(ownProps.filter));
         }
     }
 }
 
-export const FilterLink = connect<{ active: boolean }, { onClick: () => void }, FilterLinkProps, IAppState>(mapStateToProps, mapDispatchToProps)(Link);
+export const FilterLink = connect<StateToPropstype, DispatchToPropsType, FilterLinkProps, IAppState>(mapStateToProps, mapDispatchToProps)(Link);

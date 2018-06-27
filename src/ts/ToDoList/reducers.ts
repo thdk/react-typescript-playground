@@ -1,16 +1,17 @@
 import { TodoFilter, ITodo } from "./interfaces";
 
-export const todo = (state: ITodo | undefined, action: any) => {
+import {ActionTypes as TodoActiontypes, Action as TodoAction } from './actions/todos';
+import {Actiontypes as VisibilityFilterActionTypes, Action as VisibilityFilterAction } from "./actions/visibilityfilter";
+
+export const todo = (state: ITodo | undefined, action: TodoAction): ITodo => {
     switch (action.type) {
-        case "ADD_TODO":
+        case TodoActiontypes.ADD_TODO:
             return {
                 id: action.id,
                 text: action.text,
                 completed: false
             };
-        case "TOGGLE_TODO":
-            console.log(state);
-            console.log(action);
+        case TodoActiontypes.TOGGLE_TODO:
             if (!state)
                 throw "Cannot toggle the Todo as it's undefined.";
 
@@ -19,20 +20,14 @@ export const todo = (state: ITodo | undefined, action: any) => {
                 return state;
             }
 
-            const newState = {
+            return {
                 ...state,
                 completed: !state.completed
             };
-            console.log("new state");
-            console.log(newState);
-            return newState;
-        default:
-            throw `${action.type} is not implemented`;
     }
 }
 
 export const todos = (state: ITodo[] = [], action: any): ITodo[] => {
-    console.log(action);
     switch (action.type) {
         case 'ADD_TODO':
             return [
@@ -46,9 +41,9 @@ export const todos = (state: ITodo[] = [], action: any): ITodo[] => {
     }
 }
 
-export const visibilityFilter = (state: TodoFilter = 'SHOW_ALL', action: any): TodoFilter => {
+export const visibilityFilter = (state: TodoFilter = 'SHOW_ALL', action: VisibilityFilterAction): TodoFilter => {
     switch (action.type) {
-        case 'SET_VISIBILITY_FILTER':
+        case VisibilityFilterActionTypes.SET_VISIBILITY_FILTER:
             return action.filter;
         default:
             return state;

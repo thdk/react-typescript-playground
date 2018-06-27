@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 import { ITodo, TodoFilter, IAppState } from "../interfaces";
-import { TodoList } from "../components/TodoList";
+import { TodoList, TodoListProps } from "../components/TodoList";
 
 const getVisibleTodos = (todos: ITodo[] | undefined, filter: TodoFilter) => {
     if (!todos)
@@ -17,16 +17,18 @@ const getVisibleTodos = (todos: ITodo[] | undefined, filter: TodoFilter) => {
     }
 }
 
+type StateToPropsType = Pick<TodoListProps, "todos">;
 const mapStateToProps = (state: IAppState) => {
     return {
         todos: getVisibleTodos(state.todos, state.visibilityFilter)
     }
 }
 
+type DispatchToPropsType = Pick<TodoListProps, "onTodoClick">;
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         onTodoClick: (id: number) => dispatch({ type: "TOGGLE_TODO", id })
     }
 }
 
-export const VisibleTodoList = connect<{ todos: ITodo[] }, { onTodoClick: (id: number) => { type: string, id: number } }, {}, IAppState>(mapStateToProps, mapDispatchToProps)(TodoList);
+export const VisibleTodoList = connect<StateToPropsType, DispatchToPropsType, {}, IAppState>(mapStateToProps, mapDispatchToProps)(TodoList);
