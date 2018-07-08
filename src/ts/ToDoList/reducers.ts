@@ -1,6 +1,6 @@
 import { TodoFilter, ITodo } from "./interfaces";
 
-import {ActionTypes as TodoActiontypes, Action as TodoAction } from './actions/todos';
+import {ActionTypes as TodoActiontypes, Action as TodoAction, AddTodoAction } from './actions/todos';
 import {Actiontypes as VisibilityFilterActionTypes, Action as VisibilityFilterAction } from "./actions/visibilityfilter";
 
 export const todo = (state: ITodo | undefined, action: TodoAction): ITodo => {
@@ -8,7 +8,7 @@ export const todo = (state: ITodo | undefined, action: TodoAction): ITodo => {
         case TodoActiontypes.ADD_TODO:
             return {
                 id: action.id,
-                text: action.text,
+                text: (action as AddTodoAction).text,
                 completed: false
             };
         case TodoActiontypes.TOGGLE_TODO:
@@ -27,21 +27,23 @@ export const todo = (state: ITodo | undefined, action: TodoAction): ITodo => {
     }
 }
 
-export const todos = (state: ITodo[] = [], action: any): ITodo[] => {
+export const todos = (state: ITodo[] = [], action: TodoAction): ITodo[] => {
     switch (action.type) {
-        case 'ADD_TODO':
+        case TodoActiontypes.ADD_TODO:
             return [
                 ...state,
                 todo(undefined, action)
             ];
-        case "TOGGLE_TODO":
+        case TodoActiontypes.TOGGLE_TODO:
             return state.map(t => todo(t, action));
         default:
             return state;
     }
 }
 
-export const visibilityFilter = (state: TodoFilter = 'SHOW_ALL', action: VisibilityFilterAction): TodoFilter => {
+export const visibilityFilter = (state: TodoFilter = 'all', action: VisibilityFilterAction): TodoFilter => {
+    console.log(state);
+    console.log(action);
     switch (action.type) {
         case VisibilityFilterActionTypes.SET_VISIBILITY_FILTER:
             return action.filter;

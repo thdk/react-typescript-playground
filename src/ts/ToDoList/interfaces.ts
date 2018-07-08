@@ -9,4 +9,4 @@ export interface IAppState {
     visibilityFilter: TodoFilter
 }
 
-export type TodoFilter = "SHOW_ALL" | "SHOW_ACTIVE" | "SHOW_COMPLETED";
+export type TodoFilter = "all" | "active" | "completed";

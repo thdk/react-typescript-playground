@@ -4,6 +4,7 @@ import deepFreeze from "deep-freeze";
 
 import expect from "expect";
 import { todos } from "./reducers";
+import {ActionTypes as TodoActiontypes} from "./actions/todos"
 
 export const runAllTests = () => {
     testAddTodo();
@@ -14,7 +15,7 @@ export const runAllTests = () => {
 const testAddTodo = () => {
     const stateBefore: ITodo[] = [];
     const action = {
-        type: "ADD_TODO",
+        type: TodoActiontypes.ADD_TODO,
         id: 0,
         text: 'Learn Redux',
         completed: false
@@ -63,7 +64,7 @@ const testToggleTodo = () => {
     ];
 
     const action = {
-        type: "TOGGLE_TODO",
+        type: TodoActiontypes.TOGGLE_TODO,
         id: 1
     };
 

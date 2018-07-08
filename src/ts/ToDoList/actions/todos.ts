@@ -4,30 +4,26 @@ export enum ActionTypes {
 }
 
 export interface AddTodoAction {
-    type: ActionTypes.ADD_TODO;
+    type: ActionTypes;
     id: number;
     text: string;
 }
 
 export interface ToggleTodoAction {
-    type: ActionTypes.TOGGLE_TODO;
+    type: ActionTypes;
     id: number;
 }
 
 export type Action = AddTodoAction | ToggleTodoAction;
 
 let nextTodoId = 0;
-export const addTodo = (name: string): AddTodoAction => {
-    return {
+export const addTodo = (name: string): AddTodoAction => ({
         type: ActionTypes.ADD_TODO,
         id: nextTodoId ++,
         text: name
-    }
-}
+});
 
-export const toggleTodo = (id: number): ToggleTodoAction => {
-    return {
+export const toggleTodo = (id: number): ToggleTodoAction => ({
         type: ActionTypes.TOGGLE_TODO,
         id: id
-    }
-}
+});

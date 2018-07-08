@@ -37,12 +37,18 @@
   "dependencies": {
     "@types/deep-freeze": "^0.1.1",
     "@types/expect": "^1.20.3",
+    "@types/lodash": "^4.14.110",
     "@types/react-redux": "^6.0.2",
+    "@types/react-router": "^4.0.28",
+    "@types/react-router-dom": "^4.2.7",
     "deep-freeze": "0.0.1",
     "expect": "^23.1.0",
+    "lodash": "^4.17.10",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
     "redux": "^4.0.0"
   }
 }

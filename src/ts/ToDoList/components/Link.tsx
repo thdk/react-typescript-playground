@@ -1,27 +1,20 @@
 import * as React from 'react';
-import * as RectDom from 'react-dom'
+import * as RectDom from 'react-dom';
+import {NavLink} from 'react-router-dom';
 import { TodoFilter } from '../interfaces';
 
-export type LinkProps = {
-    active: boolean;
+export type FilterLinkProps = {
+    filter: TodoFilter;
     children?: any;
-    onClick: (e: any) => void;
 }
 
-export const Link = ({ active, children, onClick }: LinkProps) => {
-    if (active) {
-        return <span>{children}</span>;
-    }
+export const FilterLink = ({ filter, children }: FilterLinkProps) => (
+    <NavLink to={filter === "all" ? "/all" : "/" + filter}
+    activeStyle={ {
+        textDecoration: 'none',
+        color: 'red'
+      }} >
+    {children}
+    </NavLink>
 
-    return (
-        <a href='#'
-            onClick={e => {
-                e.preventDefault();
-                onClick(e)
-            }
-            }
-        >
-            {children}
-        </a>
-    );
-}
+);

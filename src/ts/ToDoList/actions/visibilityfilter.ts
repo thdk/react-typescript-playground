@@ -1,7 +1,7 @@
 import { TodoFilter } from "../interfaces";
 
 export enum Actiontypes {
-    SET_VISIBILITY_FILTER
+    SET_VISIBILITY_FILTER = 10
 }
 
 export interface SetVisibilityFilterAction {
