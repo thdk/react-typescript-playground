@@ -10,7 +10,7 @@ export type TodoListProps = {
 export const TodoList = ({ todos, onTodoClick }: TodoListProps) => {
     return (
         <ul>
-            {todos!.map((todo: any) =>
+            {todos.map((todo: any) =>
                 <Todo key={todo.id} onClick={() => onTodoClick!(todo.id)} {...todo} />
             )}
         </ul>

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { IAppState } from '../interfaces';
-import { Store } from 'redux';
+import { Store, Dispatch } from 'redux';
 import { addTodo } from '../actions/todos';
 
 export interface TodoProps {

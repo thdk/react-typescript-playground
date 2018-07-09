@@ -1,8 +1,10 @@
 import * as React from "react";
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 import { ITodo, TodoFilter, IAppState } from "../interfaces";
 import { TodoList, TodoListProps } from "../components/TodoList";
 import { toggleTodo } from "../actions/todos";
+import { Dispatch } from "redux";
+import { withRouter, RouteComponentProps } from "react-router";
 
 const getVisibleTodos = (todos: ITodo[] | undefined, filter: TodoFilter) => {
     if (!todos)
@@ -18,9 +20,14 @@ const getVisibleTodos = (todos: ITodo[] | undefined, filter: TodoFilter) => {
     }
 }
 
+interface VisibleTodoListProps extends RouteComponentProps<{filter: TodoFilter}>  {
+    someExtraProp:string;
+}
+
 type StateToPropsType = Pick<TodoListProps, "todos">;
-const mapStateToProps = (state: IAppState) => ({
-        todos: getVisibleTodos(state.todos, state.visibilityFilter)
+const mapStateToProps = (state: IAppState, ownProps: VisibleTodoListProps) => ({
+        todos: getVisibleTodos(state.todos,
+            ownProps.match.params.filter)
 });
 
 type DispatchToPropsType = Pick<TodoListProps, "onTodoClick">;
@@ -30,4 +37,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     }
 });
 
-export const VisibleTodoList = connect<StateToPropsType, DispatchToPropsType, {}, IAppState>(mapStateToProps, mapDispatchToProps)(TodoList);
+export const VisibleTodoList = withRouter(connect(mapStateToProps, mapDispatchToProps)(TodoList));

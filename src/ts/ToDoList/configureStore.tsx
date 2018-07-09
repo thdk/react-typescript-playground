@@ -6,7 +6,7 @@ import { AddTodo } from './containers/AddTodo';
 import { VisibleTodoList } from './containers/VisibleTodoList';
 import { Footer } from './components/Footer';
 import { Provider } from 'react-redux';
-import { Route, Router } from "react-router";
+import { Route, Router, withRouter } from "react-router";
 import throttle from 'lodash/throttle';
 import createHistory from 'history/createBrowserHistory';
 
@@ -34,7 +34,7 @@ const configureStore = () => {
 const TodoApp = () =>
     <div>
         <AddTodo />
-        <VisibleTodoList />
+        <VisibleTodoList someExtraProp={"This is typed"}/>
         <Footer />
     </div>
 
@@ -44,7 +44,7 @@ export const Root = ({ store }: any) => {
     return (
         <Provider store={createStore(todoApp)} >
             <Router history={history}>
-                <Route path="/" component={TodoApp} />
+                <Route path="/:filter?" component={TodoApp} />
             </Router>
         </Provider>
     );
