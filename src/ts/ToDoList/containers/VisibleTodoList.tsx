@@ -17,17 +17,19 @@ const getVisibleTodos = (todos: ITodo[] | undefined, filter: TodoFilter) => {
             return todos.filter(t => !t.completed);
         case 'completed':
             return todos.filter(t => t.completed);
+        default:
+            return todos;
     }
 }
 
-interface VisibleTodoListProps extends RouteComponentProps<{filter: TodoFilter}>  {
-    someExtraProp:string;
+interface VisibleTodoListProps extends RouteComponentProps<{ filter: TodoFilter }> {
+    someExtraProp: string;
 }
 
 type StateToPropsType = Pick<TodoListProps, "todos">;
 const mapStateToProps = (state: IAppState, ownProps: VisibleTodoListProps) => ({
-        todos: getVisibleTodos(state.todos,
-            ownProps.match.params.filter)
+    todos: getVisibleTodos(state.todos,
+        ownProps.match.params.filter)
 });
 
 type DispatchToPropsType = Pick<TodoListProps, "onTodoClick">;
