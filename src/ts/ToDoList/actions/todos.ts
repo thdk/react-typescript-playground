@@ -4,13 +4,13 @@ export enum ActionTypes {
 }
 
 export interface AddTodoAction {
-    type: ActionTypes;
+    type: ActionTypes.ADD_TODO;
     id: number;
     text: string;
 }
 
 export interface ToggleTodoAction {
-    type: ActionTypes;
+    type: ActionTypes.TOGGLE_TODO;
     id: number;
 }
 

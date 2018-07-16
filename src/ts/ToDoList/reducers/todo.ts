@@ -6,7 +6,7 @@ const todo = (state: ITodo | undefined, action: TodoAction): ITodo => {
         case TodoActiontypes.ADD_TODO:
             return {
                 id: action.id,
-                text: (action as AddTodoAction).text,
+                text: action.text,
                 completed: false
             };
         case TodoActiontypes.TOGGLE_TODO:
