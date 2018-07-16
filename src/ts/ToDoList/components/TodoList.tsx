@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ITodo } from '../interfaces';
+import { ITodo, TodoFilter } from '../interfaces';
 import { Todo } from '../components/Todo';
 
 export type TodoListProps = {

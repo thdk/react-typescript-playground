@@ -8,7 +8,6 @@ import { VisibleTodoList } from './containers/VisibleTodoList';
 import { Footer } from './components/Footer';
 import { Provider } from 'react-redux';
 import { Route, Router, withRouter } from "react-router";
-import throttle from 'lodash/throttle';
 import createHistory from 'history/createBrowserHistory';
 
 // always name the reducers after the state key they manage
@@ -19,15 +18,6 @@ const todoApp = combineReducers({
 
 const configureStore = () => {
     const store = createStore(todos);
-
-    // store.subscribe(throttle(() => {
-    //     saveState({
-    //         todos: store.getState().todos,
-    //         visibilityFilter: "all"
-    //     }),
-    //         1000
-    // }))
-
     return store;
 }
 
@@ -49,16 +39,6 @@ export const Root = ({ store }: any) => {
         </Provider>
     );
 };
-
-// TODO: use local storage to receive 'persited' state
-const loadState = () => {
-    const x: Map<number, ITodo> = new Map();
-    return x;
-}
-
-const saveState = (state: IAppState) => {
-    // TODO: save state in local storage
-}
 
 export const getVisibleTodos = (state: IAppState, filter: TodoFilter) => {
     return fromTodos.getVisibleTodos(state.todos, filter);
