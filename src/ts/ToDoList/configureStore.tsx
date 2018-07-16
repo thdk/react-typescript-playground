@@ -1,7 +1,8 @@
 import React from 'react';
-import { todos, visibilityFilter } from './reducers';
+import { visibilityFilter } from './reducers';
+import todos, * as fromTodos from './reducers/todos';
 import { combineReducers, createStore, Store } from 'redux';
-import { IAppState } from './interfaces';
+import { IAppState, TodoFilter, ITodo } from './interfaces';
 import { AddTodo } from './containers/AddTodo';
 import { VisibleTodoList } from './containers/VisibleTodoList';
 import { Footer } from './components/Footer';
@@ -17,16 +18,15 @@ const todoApp = combineReducers({
 });
 
 const configureStore = () => {
-    const persistedState = loadState();
-    const store = createStore(todoApp, persistedState);
+    const store = createStore(todos);
 
-    store.subscribe(throttle(() => {
-        saveState({
-            todos: store.getState().todos,
-            visibilityFilter: "all"
-        }),
-            1000
-    }))
+    // store.subscribe(throttle(() => {
+    //     saveState({
+    //         todos: store.getState().todos,
+    //         visibilityFilter: "all"
+    //     }),
+    //         1000
+    // }))
 
     return store;
 }
@@ -51,10 +51,15 @@ export const Root = ({ store }: any) => {
 };
 
 // TODO: use local storage to receive 'persited' state
-const loadState = () => ({
-    todos: []
-});
+const loadState = () => {
+    const x: Map<number, ITodo> = new Map();
+    return x;
+}
 
 const saveState = (state: IAppState) => {
     // TODO: save state in local storage
+}
+
+export const getVisibleTodos = (state: IAppState, filter: TodoFilter) => {
+    return fromTodos.getVisibleTodos(state.todos, filter);
 }

@@ -1,3 +1,5 @@
+import { TodosState } from "./reducers/todos";
+
 export interface ITodo {
     id: number;
     text: string;
@@ -5,7 +7,7 @@ export interface ITodo {
 }
 
 export interface IAppState {
-    todos: ITodo[];
+    todos: TodosState;
     visibilityFilter: TodoFilter
 }
 

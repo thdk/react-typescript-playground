@@ -5,38 +5,17 @@ import { TodoList, TodoListProps } from "../components/TodoList";
 import { toggleTodo } from "../actions/todos";
 import { Dispatch } from "redux";
 import { withRouter, RouteComponentProps } from "react-router";
+import { getVisibleTodos } from "../configureStore";
+import { TodosState } from "../reducers/todos";
 
-const getVisibleTodos = (todos: ITodo[] | undefined, filter: TodoFilter) => {
-    if (!todos)
-        return [];
-
-    switch (filter) {
-        case 'all':
-            return todos;
-        case 'active':
-            return todos.filter(t => !t.completed);
-        case 'completed':
-            return todos.filter(t => t.completed);
-        default:
-            return todos;
-    }
-}
-
-interface VisibleTodoListProps extends RouteComponentProps<{ filter: TodoFilter }> {
-    someExtraProp: string;
+interface VisibleTodoListProps extends RouteComponentProps<{filter: TodoFilter}> {
+    someExtraProp:string;
 }
 
 type StateToPropsType = Pick<TodoListProps, "todos">;
 const mapStateToProps = (state: IAppState, ownProps: VisibleTodoListProps) => ({
-    todos: getVisibleTodos(state.todos,
-        ownProps.match.params.filter)
+        todos: getVisibleTodos(state,
+            ownProps.match.params.filter || "all")
 });
 
-type DispatchToPropsType = Pick<TodoListProps, "onTodoClick">;
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-    onTodoClick(id: number) {
-        dispatch(toggleTodo(id));
-    }
-});
-
-export const VisibleTodoList = withRouter(connect(mapStateToProps, mapDispatchToProps)(TodoList));
+export const VisibleTodoList = withRouter(connect(mapStateToProps, {onTodoClick: toggleTodo})(TodoList));

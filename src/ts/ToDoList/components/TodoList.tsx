@@ -3,14 +3,14 @@ import { ITodo } from '../interfaces';
 import { Todo } from '../components/Todo';
 
 export type TodoListProps = {
-    todos: ITodo[];
+    todos?: ITodo[] | undefined;
     onTodoClick?: (id: number) => void;
 }
 
 export const TodoList = ({ todos, onTodoClick }: TodoListProps) => {
     return (
         <ul>
-            {todos.map((todo: any) =>
+            {todos!.map((todo: any) =>
                 <Todo key={todo.id} onClick={() => onTodoClick!(todo.id)} {...todo} />
             )}
         </ul>
