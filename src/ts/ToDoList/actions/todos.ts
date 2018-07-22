@@ -1,4 +1,5 @@
 import { ITodo, TodoFilter } from "../interfaces";
+import * as api from "../api/index";
 
 export enum ActionTypes {
     ADD_TODO,
@@ -20,9 +21,10 @@ export interface ToggleTodoAction {
 export interface ReceiveTodosAction {
     type: ActionTypes.RECEIVE_TODOS;
     response: ITodo[];
+    filter: TodoFilter;
 }
 
-export type Action = AddTodoAction | ToggleTodoAction;
+export type Action = AddTodoAction | ToggleTodoAction | ReceiveTodosAction;
 
 let nextTodoId = 0;
 export const addTodo = (name: string): AddTodoAction => ({
@@ -36,7 +38,13 @@ export const toggleTodo = (id: number): ToggleTodoAction => ({
         id: id
 });
 
-export const receiveTodos = (filter: TodoFilter, response: ITodo[]): ReceiveTodosAction => ({
+const receiveTodos = (filter: TodoFilter, response: ITodo[]): ReceiveTodosAction => ({
     type: ActionTypes.RECEIVE_TODOS,
+    filter,
     response
-})
+});
+
+export const fetchTodos = (filter: TodoFilter) => {
+    api.fetchTodos(filter).then(response =>
+    receiveTodos(filter, response))
+};

@@ -1,7 +1,10 @@
 import React from 'react';
+import {applyMiddleware} from 'redux';
+import promise from 'redux-promise';
+import createLogger from 'redux-logger';
 import { visibilityFilter } from './reducers';
 import todos, * as fromTodos from './reducers/todos';
-import { combineReducers, createStore, Store } from 'redux';
+import { combineReducers, createStore, Store, Action } from 'redux';
 import { IAppState, TodoFilter, ITodo } from './interfaces';
 import { AddTodo } from './containers/AddTodo';
 import { VisibleTodoList } from './containers/VisibleTodoList';
@@ -17,14 +20,16 @@ const todoApp = combineReducers({
 });
 
 const configureStore = () => {
-    const store = createStore(todos);
-    return store;
+    const middlewares = [];
+    middlewares.push(promise);
+    middlewares.push(createLogger);
+    return createStore(todos, applyMiddleware(...middlewares))
 }
 
 const TodoApp = () =>
     <div>
         <AddTodo />
-        <VisibleTodoList someExtraProp={"This is typed"}/>
+        <VisibleTodoList someExtraProp={"This is typed"} />
         <Footer />
     </div>
 

@@ -22,6 +22,8 @@ const todo = (state: ITodo | undefined, action: TodoAction): ITodo => {
                 ...state,
                 completed: !state.completed
             };
+        default:
+            throw Error(`Action with type: ${action.type} is not supported.`);
     }
 }
 
