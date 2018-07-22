@@ -1,16 +1,18 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { ITodo, TodoFilter, IAppState } from "../interfaces";
+import { ITodo, TodoFilter } from "../interfaces";
 import { TodoList } from "../components/TodoList";
 import * as actions from "../actions/todos";
 import { withRouter, RouteComponentProps } from "react-router";
-import { getVisibleTodos } from "../configureStore";
+import { Dispatch } from "redux";
+import { TodosState, getVisibleTodos, getIsFetching } from "../reducers";
 
 export type VisibleTodoListProps = {
     todos: ITodo[];
     filter: TodoFilter;
     toggleTodo: (id: number) => actions.ToggleTodoAction;
-    fetchTodos: (filter: TodoFilter) => Promise<ITodo[]>;
+    fetchTodos: (filter: TodoFilter) => (dispatch: Dispatch, getState: () => {ids: number[], isFetching: boolean}) => void;
+    isFetching: boolean;
 }
 
 class _VisibleTodoList extends React.Component<VisibleTodoListProps> {
@@ -30,8 +32,11 @@ class _VisibleTodoList extends React.Component<VisibleTodoListProps> {
     }
 
     render() {
-        const {toggleTodo, ...rest} = this.props;
-        return <TodoList {...rest} onTodoClick={toggleTodo} />;
+        const {toggleTodo, todos, isFetching} = this.props;
+        if (isFetching && !todos.length) {
+            return <p>Loading...</p>;
+        }
+        return <TodoList todos={todos} onTodoClick={toggleTodo} />;
     }
 }
 
@@ -39,12 +44,12 @@ interface ConnectedVisibleTodoListProps extends RouteComponentProps<VisibleTodoL
     someExtraProp: string;
 }
 
-const mapStateToProps = (state: IAppState, ownProps: ConnectedVisibleTodoListProps) => {
+const mapStateToProps = (state: TodosState, ownProps: ConnectedVisibleTodoListProps) => {
     const filter = ownProps.match.params.filter || "all";
     return {
-        todos: getVisibleTodos(state,
-            filter),
-        filter
+        todos: getVisibleTodos(state, filter),
+        filter,
+        isFetching: getIsFetching(state, filter)
     }
 };
 

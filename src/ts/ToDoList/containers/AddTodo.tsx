@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { IAppState } from '../interfaces';
 import { Store, Dispatch } from 'redux';
 import { addTodo } from '../actions/todos';
 

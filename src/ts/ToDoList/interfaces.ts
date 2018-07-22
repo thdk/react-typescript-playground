@@ -1,14 +1,9 @@
-import { TodosState } from "./reducers/todos";
+import { TodosState } from "./reducers";
 
 export interface ITodo {
     id: number;
     text: string;
     completed: boolean;
-}
-
-export interface IAppState {
-    todos: TodosState;
-    visibilityFilter: TodoFilter
 }
 
 export type TodoFilter = "all" | "active" | "completed";
